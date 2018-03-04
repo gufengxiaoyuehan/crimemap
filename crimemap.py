@@ -4,7 +4,7 @@ from dbhelper import DBHelper
 from flask import Flask
 from flask import render_template
 from flask import request
-
+from flask import jsonify
 import traceback
 import dbconfig
 import json
@@ -54,6 +54,17 @@ def submitcrime():
     description = request.form.get("description")
     DB.add_crime(category,date,latitude,longitude,description)
     return home()
+
+
+@app.route("/cookies")
+def cookies():
+    cookies_str = ";".join([str(x)+"="+str(y) for x,y in request.cookies.items()])
+    return cookies_str
+
+
+@app.route("/ip")
+def ip():
+    return jsonify({"ip": request.remote_addr}),200
 
 if __name__ == "__main__":
     app.run(port=5000,debug=True)
