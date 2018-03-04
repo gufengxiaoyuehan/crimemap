@@ -40,3 +40,13 @@ class DBHelper(object):
         finally:
             connection.close()
 
+    def add_crime(self, category, date, latitude, longitude, description):
+        connection = self.connect()
+        try:
+            query = "INSERT into crimes(category, date, latitude, longitude, description) " \
+                    "values (%s, %s, %s, %s, %s)"
+            with connection.cursor() as cursor:
+                cursor.execute(query,(category, date, latitude, longitude, description))
+                connection.commit()
+        finally:
+            connection.close()
