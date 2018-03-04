@@ -11,23 +11,33 @@
                     center: new google.maps.LatLng(-33.30578381949298, 26.523442268371582),
                     zoom: 15
                 }
-                map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
-                google.maps.event.addListener(map,'click',function (event) {
+                map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+                google.maps.event.addListener(map, 'click', function (event) {
                     placeMarker(event.latLng);
                 })
+                placeCrimes({{ crimes | safe }})
 
                 function placeMarker(location) {
-                    if (marker){
+                    if (marker) {
                         marker.setPosition(location);
                     }
-                    else{
+                    else {
                         marker = new google.maps.Marker({
                             position: location,
-                             map: map
+                            map: map
                         })
                     }
                     document.getElementById("latitude").value = location.lat();
                     document.getElementById("longitude").value = location.lng();
+                }
+            }
+            function placeCrimes(crimes) {
+                for (i=0; i<crimes.length; i++){
+                    crime = new google.maps.Marker({
+                        position: new google.maps.LatLng(crimes[i].latitude, crimes[i].longitude),
+                        map: map,
+                        title: crimes[i].date+"\n"+crimes[i].category + "\n" + crimes[i].description
+                    })
                 }
             }
         </script>

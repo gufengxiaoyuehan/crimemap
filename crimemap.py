@@ -7,6 +7,7 @@ from flask import request
 
 import traceback
 import dbconfig
+import json
 if dbconfig.test:
     from mockdbhelper import MockDBHelper as DBHelper
 else:
@@ -15,13 +16,17 @@ else:
 app = Flask(__name__)
 DB = DBHelper()
 
+
 @app.route("/")
 def home():
+    crimes = []
     try:
-        data = DB.get_all_inputs()
+        crimes = DB.get_all_crimes()
+        crimes = json.dumps(crimes)
     except Exception as e:
         print(traceback.format_exc())
-    return render_template("home.html",data=data)
+    return render_template("home.html", crimes=crimes)
+
 
 @app.route("/add",methods=["POST"])
 def add():
